@@ -42,6 +42,19 @@ L.TileLayer.Ajax = L.TileLayer.extend({
         if (this._map._panTransition && this._map._panTransition._inProgress) { return; }
         if (this._tilesToLoad < 0) { this._tilesToLoad = 0; }
         L.TileLayer.prototype._update.apply(this, arguments);
+    },
+    _getZoomForUrl: function () {
+        var options = this.options,
+            zoom = this._map.getZoom();
+
+        if (options.zoomReverse) {
+            zoom = options.maxZoom - zoom;
+        }
+
+        zoom += options.zoomOffset;
+
+        zoom = options.maxNativeZoom ? Math.min(zoom, options.maxNativeZoom) : zoom;
+        return Math.floor(zoom);
     }
 });
 
